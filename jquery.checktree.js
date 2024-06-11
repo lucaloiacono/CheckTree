@@ -32,6 +32,9 @@ jQuery.fn.checkTree = function(settings) {
         
         /* Valid choices: 'expand', 'check' */
         labelAction: "expand",
+
+        // Disabled state
+        disabled: false,
         
         // Debug (currently does nothing)
         debug: false
@@ -61,7 +64,9 @@ jQuery.fn.checkTree = function(settings) {
         - $tree.find('li:has(li) > .arrow') <- This was the fastest.
     */
     $tree.find('li:has(li) > .arrow')
-        .click(function() {
+        .click(function () {
+            if (settings.disabled) return; // Do nothing if disabled
+
             var $this = jQuery(this);
             $this
                 .toggleClass('expanded')
@@ -92,7 +97,9 @@ jQuery.fn.checkTree = function(settings) {
     /*
     What to do when the checkbox is clicked
     */
-    $tree.find('.checkbox').click(function() {
+    $tree.find('.checkbox').click(function () {
+        if (settings.disabled) return; // Do nothing if disabled
+
         var $this = jQuery(this);
         $this
             .toggleClass('checked')
@@ -164,7 +171,9 @@ jQuery.fn.checkTree = function(settings) {
     What to do when a label is hovered or clicked
     */
     $tree.find('label')
-        .click(function() {
+        .click(function () {
+            if (settings.disabled) return; // Do nothing if disabled
+
             switch(settings.labelAction) {
                 case 'expand':
                     jQuery(this).siblings('.arrow:first').click();
@@ -217,5 +226,7 @@ jQuery.fn.checkTree = function(settings) {
 
     // Trigger the change event for any pre-checked checkboxes on initialization
     $checkboxes.filter(':checked').trigger('change');
+
+    return this;
 };
 })(jQuery);
